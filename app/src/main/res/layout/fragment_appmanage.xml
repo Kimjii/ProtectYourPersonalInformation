@@ -4,4 +4,85 @@
               android:layout_width = "match_parent"
               android:layout_height = "match_parent">
 
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:showDividers="beginning|end"
+        android:layout_weight="60"
+        android:stretchColumns="0">
+
+        <TableRow
+            android:layout_weight="10"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Public mode"
+                android:paddingLeft="20dp"
+                android:layout_column="0"
+                android:layout_gravity="center_vertical"/>
+
+            <Switch
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingRight="50dp"
+                android:id="@+id/lockSwitch"
+                android:layout_column="1"
+                android:layout_gravity="center_vertical"/>
+
+        </TableRow>
+
+        <TableRow
+            android:layout_weight="10"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        </TableRow>
+
+        <TableRow
+            android:layout_weight="10"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        </TableRow>
+
+        <TableRow
+            android:layout_weight="10"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        </TableRow>
+
+        <TableRow
+            android:layout_weight="10"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        </TableRow>
+
+        <TableRow
+            android:layout_weight="10"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="mode"
+                android:id="@+id/modeTextView"
+                android:layout_gravity="center|center_vertical"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="작동중 입니다!"
+                android:id="@+id/textView"
+                android:layout_gravity="center|center_vertical"
+                android:layout_marginRight="80dp"/>
+
+        </TableRow>
+
+    </TableLayout>
+
 </LinearLayout>

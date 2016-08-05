@@ -132,7 +132,7 @@ public class MainActivity extends AppCompatActivity
             switch ( position )
             {
                 case 0:
-                    return "기기 잠금";
+                    return "잠금 관리";
                 case 1:
                     return "어플 관리";
                 case 2:
