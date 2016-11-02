@@ -6,12 +6,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-public class PasswordManageActivity extends Fragment
+public class MissingManageFragment extends Fragment
 {
     @Override
     public View onCreateView( LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState )
     {
-        View view = inflater.inflate( R.layout.fragment_passwordmanage, null );
+        View view = inflater.inflate( R.layout.fragment_missingmanage, null );
 
         //생성된 View 객체를 리턴
         return view;

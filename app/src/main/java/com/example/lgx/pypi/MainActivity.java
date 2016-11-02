@@ -101,19 +101,19 @@ public class MainActivity extends AppCompatActivity
             switch ( position )
             {
                 case 0:
-                    fragment = new LockControlActivity();
+                    fragment = new LockManageFragment();
                     break;
 
                 case 1:
-                    fragment = new AppManageActivity();
+                    fragment = new AppManageFragment();
                     break;
 
                 case 2:
-                    fragment = new PasswordManageActivity();
+                    fragment = new PasswordManageFragment();
                     break;
 
                 case 3:
-                    fragment = new MissingManageActivity();
+                    fragment = new MissingManageFragment();
                     break;
             }
             return fragment;

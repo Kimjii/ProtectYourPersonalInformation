@@ -5,25 +5,68 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:weightSum="4">
+    android:weightSum="100">
 
     <TextClock
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
+        android:layout_weight="20"
         android:gravity="center_vertical|center"
         android:textSize="50dp"
-        tools:targetApi = "jelly_bean_mr1" />
+        tools:targetApi = "jelly_bean_mr1"
+        android:id="@+id/textClock"
+        android:layout_marginTop="50dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Medium Text"
+        android:id="@+id/currentDate"
+        android:layout_gravity="center_horizontal"
+        android:layout_weight="20"
+        android:textSize="20dp"
+        android:layout_marginBottom="10dp"/>
 
     <EditText
         android:layout_width="250dp"
         android:layout_height="wrap_content"
         android:inputType="textPassword"
         android:ems="10"
-        android:id="@+id/editText"
-        android:layout_weight="1"
+        android:id="@+id/PasswordField"
+        android:layout_weight="20"
+        android:autoText="false"
         android:layout_marginBottom="50dp"
-        android:layout_gravity="center_vertical|center" />
+        android:layout_gravity="center_vertical|center"
+        android:password="true" />
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="2">
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="취소"
+            android:id="@+id/lockActivity_cancelButton"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:layout_weight="1"/>
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="확인"
+            android:id="@+id/lockActivity_confirmButton"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:layout_weight="1"
+            android:enabled="false" />
+
+    </LinearLayout>
 
 </LinearLayout>
