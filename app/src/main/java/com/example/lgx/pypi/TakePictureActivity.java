@@ -1,8 +1,13 @@
 package com.example.lgx.pypi;
 
+
+import android.content.Intent;
 import android.hardware.Camera;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -12,6 +17,10 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 
+import com.google.android.gms.appindexing.Action;
+import com.google.android.gms.appindexing.AppIndex;
+import com.google.android.gms.common.api.GoogleApiClient;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -20,15 +29,20 @@ import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 
+
 /**
  * Created by Jiwon on 2016-11-01.
  */
-public class TakePictureActivity extends AppCompatActivity  {
+public class TakePictureActivity extends AppCompatActivity {
+    public static final int SEND_INFORMATION = 0;
+    public static final int SEND_STOP = 1;
 
     private Camera camera;
     Button button;
     private TimerTask mTask;
     private Timer mTimer;
+
+    Handler mHandler = null;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -36,7 +50,7 @@ public class TakePictureActivity extends AppCompatActivity  {
         setContentView(R.layout.activity_takepicture);
 
         // 전체 화면 지정( 화면 상부의 아이콘이나 시계 X )
-       getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         // 카메라 미리보기 화면 설정
         SurfaceView cameraPreview = (SurfaceView) this.findViewById(R.id.surfaceView);
@@ -45,24 +59,25 @@ public class TakePictureActivity extends AppCompatActivity  {
         cameraPreview.getHolder().addCallback(previewCallback);
 
         // 서페이스 홀더 유형 설정 ( 외부 버퍼 사용 )
-        cameraPreview.getHolder().setType( SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS );
+        cameraPreview.getHolder().setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
 
         button = (Button) findViewById(R.id.button);
         button.setOnClickListener(shutterButtonListener);
     }
 
-    private View.OnClickListener shutterButtonListener = new View.OnClickListener(){
+    private View.OnClickListener shutterButtonListener = new View.OnClickListener() {
 
         @Override
         public void onClick(View v) {
-            camera.takePicture(null, null, new Camera.PictureCallback(){
+            camera.takePicture(null, null, new Camera.PictureCallback() {
                 @Override
                 public void onPictureTaken(byte[] data, Camera camera) {
 
                     //SD카드에 저장 처리 호출
-                    try{
-                        saveSD(data);// SD카드에 저장
-                    }catch(Exception e){
+                    try {
+                        saveGallery(data);// SD카드에 저장
+                        finish();
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
                 }
@@ -73,6 +88,7 @@ public class TakePictureActivity extends AppCompatActivity  {
     @Override
     protected void onStart() {
         super.onStart();
+
         mTask = new TimerTask() {
             @Override
             public void run() {
@@ -82,18 +98,19 @@ public class TakePictureActivity extends AppCompatActivity  {
 
         mTimer = new Timer();
         mTimer.schedule(mTask, 500);
+
     }
 
     // 서페이스 홀더의 callback() 메소드 구현
-    private SurfaceHolder.Callback previewCallback = new SurfaceHolder.Callback2(){
+    private SurfaceHolder.Callback previewCallback = new SurfaceHolder.Callback2() {
         @Override
         public void surfaceRedrawNeeded(SurfaceHolder holder) {
 
         }
 
-        public void surfaceCreated(SurfaceHolder holder){
+        public void surfaceCreated(SurfaceHolder holder) {
             //카메라 초기화
-            try{
+            try {
                 int camNo = Camera.getNumberOfCameras();
                 //Log.i("Number of cameras," + camNo);
 
@@ -105,7 +122,7 @@ public class TakePictureActivity extends AppCompatActivity  {
 
                 camera.setDisplayOrientation(90);
 
-            }catch (IOException e){
+            } catch (IOException e) {
                 e.printStackTrace();
             }
         }
@@ -119,7 +136,7 @@ public class TakePictureActivity extends AppCompatActivity  {
             Camera.Parameters params = camera.getParameters();
 
             //매개 변수에 미리보기 크기 설정
-            params.setPreviewSize( params.getPreviewSize().width, params.getPreviewSize().height );
+            params.setPreviewSize(params.getPreviewSize().width, params.getPreviewSize().height);
 
             // 설정한 매개 변수를 지정
             camera.setParameters(params);
@@ -139,18 +156,34 @@ public class TakePictureActivity extends AppCompatActivity  {
         }
     };
 
-    private void saveSD( byte[] data ) throws  Exception {
-        // SD카드/패키지명 디렉터리 작성
-        File dataDir = new File(Environment.getExternalStorageDirectory(), this.getPackageName());
-        if( dataDir.exists() == false ){
-            dataDir.mkdir();
-        }
+    private void saveGallery(byte[] data) throws Exception {
+        String saveFolderName = "PYPI";
+        try {
 
-        // SD카드에 데이터 저장 파일명은 yyyyMMdd_HHmmss.jpg
-        Date today = new Date();
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmssS");
-        FileOutputStream fos = new FileOutputStream(dataDir + "/" + dateFormat.format(today) + ".jpg");
-        fos.write(data);
-        fos.close();
+            //메모리에 찍은 사진을 저장하기 위한 부분
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmss");
+            Date currentDate = new Date();
+            String dateString = formatter.format(currentDate);
+            File sdCardPath = Environment.getExternalStorageDirectory();
+
+            File dirs = new File(Environment.getExternalStorageDirectory(), saveFolderName);
+            if (dirs.mkdirs()) {
+                Log.d("CAMERA_TEST", "Directory Created");
+            }
+
+            FileOutputStream out = null;
+            String pictureName = sdCardPath.getPath() + "/" + saveFolderName + "/pic" + dateString + ".jpg";
+            out = new FileOutputStream(pictureName);
+            out.write(data);
+            out.close();
+
+            // 갤러리에 저장된 이미지를 띄우기 위한 부분 <<<<<<<<<<<<<<<<<<<<<<<<<<안됨>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+            MediaScanner scanner = MediaScanner.newInstance(TakePictureActivity.this);
+            scanner.mediaScanning( Environment.getExternalStorageState() +"/" + saveFolderName );
+
+        } catch (IOException e) {
+            Log.e("CAMERA_TEST", "" + e.toString());
+        }
     }
+
 }

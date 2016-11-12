@@ -113,7 +113,7 @@ public class MainActivity extends AppCompatActivity
                     break;
 
                 case 3:
-                    fragment = new MissingManageFragment();
+                    fragment = new AdminReceiver.MissingManageFragment();
                     break;
             }
             return fragment;

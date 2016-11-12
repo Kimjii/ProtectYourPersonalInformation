@@ -2,31 +2,59 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 android:layout_width="match_parent"
 android:layout_height="match_parent"
-android:orientation="vertical">
+    android:orientation="vertical">
 
-<TableLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_weight="60"
-    android:stretchColumns="0">
-
-    <TableRow
-        android:layout_weight="10"
+    <TableLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-    </TableRow>
+        android:layout_height="wrap_content"
+        android:layout_weight="60"
+        android:stretchColumns="0">
 
-    <TableRow
-        android:layout_weight="10"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-    </TableRow>
+        <TableRow
+            android:layout_weight="10"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-    <TableRow
-        android:layout_weight="10"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-    </TableRow>
+            <TextView
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="초기화"
+                android:paddingLeft="20dp"
+                android:layout_column="0"
+                android:layout_gravity="center_vertical"/>
+
+            <ToggleButton
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingRight="50dp"
+                android:layout_marginRight = "10dp"
+                android:textOff = "비활성"
+                android:textOn = "활성"
+                android:id="@+id/initializeActivationToggleButton"
+                android:layout_column="1"
+                android:layout_gravity="center_vertical"/>
+
+        </TableRow>
+
+        <TableRow
+            android:layout_weight="10"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <Button
+                style="?android:attr/borderlessButtonStyle"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="단말기 초기화"
+                android:gravity="left|center"
+                android:paddingLeft="20dp"
+                android:layout_span="2"
+                android:background="#00ff0000"
+                android:id="@+id/initializeButton"/>
+
+        </TableRow>
 
     <TableRow
         android:layout_weight="10"

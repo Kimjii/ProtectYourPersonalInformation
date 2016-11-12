@@ -3,10 +3,12 @@ package com.example.lgx.pypi;
 import android.app.ActionBar;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
+import android.view.Menu;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
@@ -45,8 +47,8 @@ public class LockActivity extends AppCompatActivity
         final String[] month = { "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" };
 
         TextView currentDate = (TextView)findViewById(R.id.currentDate);
-        currentDate.setText( week[calendar.get(Calendar.DAY_OF_WEEK) - 1] + ", "
-                        + month[calendar.get(Calendar.MONTH) - 1] + calendar.get(Calendar.DAY_OF_MONTH) + ", "
+        currentDate.setText( week[calendar.get(Calendar.DAY_OF_WEEK) - 1]
+                        + month[calendar.get(Calendar.MONTH) - 1] +" "+ calendar.get(Calendar.DAY_OF_MONTH) + ", "
                         + calendar.get(Calendar.YEAR) );
 
         final EditText passwordField = (EditText)findViewById(R.id.PasswordField);
@@ -73,8 +75,13 @@ public class LockActivity extends AppCompatActivity
             public void onClick(View v) {
                 if( password.equals( passwordField.getText().toString() ) )
                     finish();
-                else
+                else {
                     passwordField.setText("");
+
+                    //비밀번호 틀려서 캡쳐하는 부분
+                    Intent cameraIntent = new Intent( LockActivity.this, TakePictureActivity.class );
+                    startActivity( cameraIntent );
+                }
             }
         });
 
@@ -94,8 +101,6 @@ public class LockActivity extends AppCompatActivity
             @Override
             public void onClick(View v) {
                 passwordField.setText("");
-                Intent cameraIntent = new Intent( LockActivity.this, TakePictureActivity.class );
-                startActivity( cameraIntent );
             }
         });
 
@@ -138,5 +143,12 @@ public class LockActivity extends AppCompatActivity
         password = "0000";
 
     }
+
+    // 뒤로가기 버튼 이벤트 제어
+    @Override
+    public void onBackPressed() {
+
+    }
+
 }
 
