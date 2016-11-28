@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android = "http://schemas.android.com/apk/res/android"
-          package = "com.example.lgx.pypi">
+          package = "com.example.lgx.pypi"
+    android:versionCode="4"
+    android:versionName="2.0.2" >
 
     <uses-permission android:name="android.permission.DISABLE_KEYGUARD" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
@@ -8,12 +10,49 @@
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
+    <!-- 통신 관련 -->
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+    <uses-permission android:name="com.samsung.accessory.permission.ACCESSORY_FRAMEWORK" />
+    <uses-permission android:name="com.samsung.android.providers.context.permission.WRITE_USE_APP_FEATURE_SURVEY" />
+    <uses-permission android:name="com.samsung.wmanager.ENABLE_NOTIFICATION" />
+    <uses-permission android:name="com.samsung.WATCH_APP_TYPE.Companion"/>
+
+    <uses-sdk
+        android:minSdkVersion="15"
+        android:targetSdkVersion="21" />
+    <!-- 통신 관련 끝 -->
+
     <application
         android:allowBackup = "true"
         android:icon = "@mipmap/ic_launcher"
         android:label = "@string/app_name"
         android:supportsRtl = "true"
         android:theme = "@style/AppTheme">
+
+        <!-- 통신 관련 -->
+        <service android:name=".CommunicationService" />
+
+        <receiver android:name="com.samsung.android.sdk.accessory.RegisterUponInstallReceiver" >
+            <intent-filter>
+                <action android:name="com.samsung.accessory.action.REGISTER_AGENT" />
+            </intent-filter>
+        </receiver>
+
+        <receiver android:name="com.samsung.android.sdk.accessory.ServiceConnectionIndicationBroadcastReceiver" >
+            <intent-filter>
+                <action android:name="com.samsung.accessory.action.SERVICE_CONNECTION_REQUESTED" />
+            </intent-filter>
+        </receiver>
+
+        <meta-data
+            android:name="AccessoryServicesLocation"
+            android:value="/res/xml/accessoryservices.xml" />
+
+        <meta-data
+            android:name="GearAppType"
+            android:value="wgt" />
+        <!-- 통신 관련 끝 -->
 
         <activity
             android:name = ".MainActivity"

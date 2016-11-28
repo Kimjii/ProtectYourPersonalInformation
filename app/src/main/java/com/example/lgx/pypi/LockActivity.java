@@ -7,6 +7,7 @@ import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.View;
@@ -146,8 +147,16 @@ public class LockActivity extends AppCompatActivity
 
     // 뒤로가기 버튼 이벤트 제어
     @Override
-    public void onBackPressed() {
+    public void onBackPressed() {}
 
+    // 홈 버튼 이벤트
+    @Override
+    protected void onUserLeaveHint() {
+        super.onUserLeaveHint();
+
+        Intent intent = new Intent( this, LockActivity.class);
+        startActivity(intent);
+        finish();
     }
 
 }

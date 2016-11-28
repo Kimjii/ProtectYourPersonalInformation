@@ -3,13 +3,13 @@ package com.example.lgx.pypi;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
@@ -21,10 +21,16 @@ import java.io.InputStreamReader;
 
 public class LockManageFragment extends Fragment
 {
+    //test
+    CommunicationManager communicationManager = new CommunicationManager();
+    Button sendButton;
+    Button connectButton;
+    //test
+
     static final String PASSWORD_FILE = "password.txt";
     TextView disPassword;
 
-    ToggleButton lockActivationButton;
+    ToggleButton lockActivationToggleButton;
     SharedPreferences sharedPreferences;
 
     String password;
@@ -32,6 +38,26 @@ public class LockManageFragment extends Fragment
     public View onCreateView( LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState )
     {
         View view = inflater.inflate( R.layout.fragment_lockmanage, null );
+
+        //test
+        communicationManager.bindService( getActivity() );
+        connectButton = (Button) view.findViewById(R.id.connectButton);
+        connectButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                communicationManager.connect();
+            }
+        });
+
+        sendButton = (Button) view.findViewById(R.id.sendButton);
+        sendButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getActivity().getApplicationContext(), "send!", Toast.LENGTH_LONG).show();
+                communicationManager.send("LockManageFragment", getActivity().getApplicationContext() );
+            }
+        });
+        //test
 
         final Button changePasswdBtn = (Button) view.findViewById(R.id.changePasswdButton) ;
         changePasswdBtn.setOnClickListener(new Button.OnClickListener() {
@@ -48,10 +74,11 @@ public class LockManageFragment extends Fragment
 
         loadPassword();
 
-        lockActivationButton = (ToggleButton)view.findViewById(R.id.lockActivationButton);
-        lockActivationButton.setOnClickListener(new View.OnClickListener(){
-            public void onClick(View v ){
-                if( lockActivationButton.isChecked() ){
+        lockActivationToggleButton = (ToggleButton)view.findViewById(R.id.lockActivationButton);
+        lockActivationToggleButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if( isChecked ){
                     Intent intent = new Intent( getActivity(), ScreenService.class);
                     getActivity().startService(intent);
                 }
@@ -63,6 +90,7 @@ public class LockManageFragment extends Fragment
         });
 
         sharedPreferences = this.getActivity().getSharedPreferences("pref", Context.MODE_PRIVATE);
+
         //생성된 View 객체를 리턴
         return view;
     }
@@ -93,23 +121,34 @@ public class LockManageFragment extends Fragment
     /* 앱 종료 후 재실행 시 컴포넌트 상태 저장을 위한 부분*/
     public void onPause() {
         super.onPause();
-        save( lockActivationButton.isChecked() );
+        save();
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        lockActivationButton.setChecked(load());
+        load();
     }
 
-    private void save(final boolean isChecked) {
+    public void save() {
         SharedPreferences.Editor editor = sharedPreferences.edit();
 
-        editor.putBoolean("check", isChecked);
+        editor.putBoolean("lockActivationToggleState", lockActivationToggleButton.isChecked());
         editor.commit();
     }
 
-    private boolean load() {
-        return sharedPreferences.getBoolean("check", false);
+    public void load() {
+        boolean isChecked = sharedPreferences.getBoolean( "lockActivationToggleState", false );
+
+        lockActivationToggleButton. setChecked(isChecked);
+    }
+
+    // communication unbind
+
+    @Override
+    public void onDestroy() {
+        communicationManager.unbound( getActivity() );
+        communicationManager.disconnect( getContext() );
+        super.onDestroy();
     }
 }

@@ -7,6 +7,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
@@ -26,6 +27,7 @@ public class AdminReceiver extends  DeviceAdminReceiver{
         private ToggleButton initializeActivationToggleButton;
         private Button initializeButton;
 
+        SharedPreferences sharedPreferences;
 
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -43,6 +45,8 @@ public class AdminReceiver extends  DeviceAdminReceiver{
 
             initializeActivationToggleButton = (ToggleButton)view.findViewById(R.id.initializeActivationToggleButton);
             initializeActivationToggleButton.setOnClickListener( initializeActivationListener );
+
+            sharedPreferences = this.getActivity().getSharedPreferences("pref", Context.MODE_PRIVATE);
 
             //생성된 View 객체를 리턴
             return view;
@@ -97,10 +101,31 @@ public class AdminReceiver extends  DeviceAdminReceiver{
         public void onResume() {
             super.onResume();
             updateButtonStates();
+            load();
         }
 
         public void initializeDevice(){
             mDPM.wipeData(0);
         }
+
+        /* 앱 종료 후 재실행 시 컴포넌트 상태 저장을 위한 부분*/
+        public void onPause() {
+            super.onPause();
+            save();
+        }
+
+        public void save() {
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+
+            editor.putBoolean("initializeActivationToggleState", initializeActivationToggleButton.isChecked());
+            editor.commit();
+        }
+
+        public void load() {
+            boolean isChecked = sharedPreferences.getBoolean( "initializeActivationToggleState", false );
+
+            initializeActivationToggleButton. setChecked(isChecked);
+        }
+        //
     }
 }
