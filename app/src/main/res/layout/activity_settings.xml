@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:showDividers="beginning|end"
+    android:textAlignment="center"
+    android:foregroundGravity="top">
+
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:weightSum="1"
+        android:stretchColumns="0"
+        android:foregroundGravity="top">
+
+        <TableRow
+            android:layout_weight="0.2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:foregroundGravity="top">
+        </TableRow>
+
+        <TableRow
+            android:layout_weight="0.2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:showDividers="end">
+
+            <Button
+                style="?android:attr/borderlessButtonStyle"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="스마트 워치 연결"
+                android:gravity="center"
+                android:paddingLeft="20dp"
+                android:layout_span="2"
+                android:background="#00ff0000"
+                android:id="@+id/connectButton"/>
+
+        </TableRow>
+
+        <TableRow
+            android:layout_weight="0.2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:showDividers="beginning|end">
+        </TableRow>
+
+
+        <TableRow
+            android:layout_weight="0.2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <Button
+                style="?android:attr/borderlessButtonStyle"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="스마트 워치 연결 테스트"
+                android:gravity="center"
+                android:paddingLeft="20dp"
+                android:layout_span="2"
+                android:background="#00ff0000"
+                android:id="@+id/testButton"/>
+        </TableRow>
+
+        <TableRow
+            android:layout_weight="0.2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        </TableRow>
+    </TableLayout>
+</LinearLayout>

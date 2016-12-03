@@ -14,8 +14,18 @@ import android.widget.Toast;
  */
 public class CommunicationManager {
 
+    private static CommunicationManager cm = null;
     private boolean mIsBound = false;
     private CommunicationService communicationService = null;
+
+    private CommunicationManager(){}
+
+    public static CommunicationManager getInstance(){
+        if ( cm == null )
+            cm = new CommunicationManager();
+        return cm;
+    }
+
 
     public void bindService( Activity activity ){
         mIsBound = activity.bindService( new Intent(activity, CommunicationService.class), mConnection, Context.BIND_AUTO_CREATE );

@@ -22,9 +22,9 @@ import java.io.InputStreamReader;
 public class LockManageFragment extends Fragment
 {
     //test
-    CommunicationManager communicationManager = new CommunicationManager();
+    CommunicationManager communicationManager = CommunicationManager.getInstance();
+
     Button sendButton;
-    Button connectButton;
     //test
 
     static final String PASSWORD_FILE = "password.txt";
@@ -39,15 +39,9 @@ public class LockManageFragment extends Fragment
     {
         View view = inflater.inflate( R.layout.fragment_lockmanage, null );
 
-        //test
+        // communication related
         communicationManager.bindService( getActivity() );
-        connectButton = (Button) view.findViewById(R.id.connectButton);
-        connectButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                communicationManager.connect();
-            }
-        });
+        communicationManager.connect();
 
         sendButton = (Button) view.findViewById(R.id.sendButton);
         sendButton.setOnClickListener(new View.OnClickListener() {
@@ -57,7 +51,7 @@ public class LockManageFragment extends Fragment
                 communicationManager.send("LockManageFragment", getActivity().getApplicationContext() );
             }
         });
-        //test
+        // communication related
 
         final Button changePasswdBtn = (Button) view.findViewById(R.id.changePasswdButton) ;
         changePasswdBtn.setOnClickListener(new Button.OnClickListener() {
@@ -79,10 +73,12 @@ public class LockManageFragment extends Fragment
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if( isChecked ){
+                    communicationManager.send("1-1-1", getActivity().getApplicationContext() );
                     Intent intent = new Intent( getActivity(), ScreenService.class);
                     getActivity().startService(intent);
                 }
                 else {
+                    communicationManager.send("1-1-2", getActivity().getApplicationContext() );
                     Intent intent = new Intent( getActivity(), ScreenService.class);
                     getActivity().stopService(intent);
                 }

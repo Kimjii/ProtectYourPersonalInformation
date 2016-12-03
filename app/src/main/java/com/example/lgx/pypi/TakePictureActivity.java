@@ -34,8 +34,10 @@ import java.util.TimerTask;
  * Created by Jiwon on 2016-11-01.
  */
 public class TakePictureActivity extends AppCompatActivity {
-    public static final int SEND_INFORMATION = 0;
-    public static final int SEND_STOP = 1;
+    //public static final int SEND_INFORMATION = 0;
+    //public static final int SEND_STOP = 1;
+
+    CommunicationManager communicationManager = CommunicationManager.getInstance();
 
     private Camera camera;
     Button button;
@@ -48,6 +50,10 @@ public class TakePictureActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_takepicture);
+
+        // communication related
+        communicationManager.bindService( this );
+        communicationManager.connect();
 
         // 전체 화면 지정( 화면 상부의 아이콘이나 시계 X )
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
@@ -177,6 +183,9 @@ public class TakePictureActivity extends AppCompatActivity {
             out.write(data);
             out.close();
 
+            // 촬영된 사진 gearS2로 전송
+            sendToGearS2(data);
+
             // 갤러리에 저장된 이미지를 띄우기 위한 부분 <<<<<<<<<<<<<<<<<<<<<<<<<<안됨>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
             MediaScanner scanner = MediaScanner.newInstance(TakePictureActivity.this);
             scanner.mediaScanning( Environment.getExternalStorageState() +"/" + saveFolderName );
@@ -184,6 +193,10 @@ public class TakePictureActivity extends AppCompatActivity {
         } catch (IOException e) {
             Log.e("CAMERA_TEST", "" + e.toString());
         }
+    }
+
+    public void sendToGearS2(byte[] imgData){
+        communicationManager.send( "1-3-" + imgData.toString() ,this.getApplicationContext() );
     }
 
 }

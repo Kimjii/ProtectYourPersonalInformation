@@ -149,7 +149,8 @@ public class LockActivity extends AppCompatActivity
     @Override
     public void onBackPressed() {}
 
-    // 홈 버튼 이벤트
+    // 홈 버튼 이벤트 -> 주석 해제할 경우 비밀번호 틀리면 잠금화면이 반복해서 뜨게 됨 !!! 홈버튼을 제어할 다른 방법 찾기
+    /*
     @Override
     protected void onUserLeaveHint() {
         super.onUserLeaveHint();
@@ -157,7 +158,7 @@ public class LockActivity extends AppCompatActivity
         Intent intent = new Intent( this, LockActivity.class);
         startActivity(intent);
         finish();
-    }
+    }*/
 
 }
 

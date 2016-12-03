@@ -126,6 +126,5 @@ public class AdminReceiver extends  DeviceAdminReceiver{
 
             initializeActivationToggleButton. setChecked(isChecked);
         }
-        //
     }
 }
