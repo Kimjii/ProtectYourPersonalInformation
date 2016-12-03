@@ -130,11 +130,12 @@ public class CommunicationService extends SAAgent {
             try {
                 mConnectionHandler.send(PYPI_CHANNEL_ID, data.getBytes());
                 retvalue = true;
+                Log.i("SendMsg", data);
             } catch (IOException e) {
                 e.printStackTrace();
             }
 
-            Toast.makeText(getApplicationContext(), "Sent: " + data, Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), "Send: " + data, Toast.LENGTH_LONG).show();
         }
         return retvalue;
     }
@@ -183,6 +184,9 @@ public class CommunicationService extends SAAgent {
         @Override
         public void onReceive(int channelId, byte[] data) {
             final String message = new String(data);
+            Log.i("CommunicationManager","Received Data is " + message );
+
+            CommunicationManager.branchFromTizenMsg( message );
 
             // broadcast로 보내서 처리
             Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();

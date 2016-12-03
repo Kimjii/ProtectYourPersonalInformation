@@ -19,7 +19,7 @@
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="잠금"
+                android:text="잠금 활성화"
                 android:paddingLeft="20dp"
                 android:layout_column="0"
                 android:layout_gravity="center_vertical"/>
@@ -60,49 +60,12 @@
             android:layout_weight="10"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-
-            <TextView
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="잠그기"
-                android:paddingLeft="20dp"
-                android:layout_column="0"
-                android:layout_gravity="center_vertical"/>
-
-            <Button
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingRight="50dp"
-                android:id="@+id/connectButton"
-                android:layout_gravity="center_vertical"
-                android:text="connect" />
-
-            <Button
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/sendButton"
-                    android:layout_gravity="center_vertical"
-                    android:text="send" />
-
         </TableRow>
 
         <TableRow
             android:layout_weight="10"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-
-            <TextView
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="password"
-                android:paddingLeft="20dp"
-                android:layout_span="2"
-                android:layout_column="0"
-                android:id="@+id/disPassword"
-                android:layout_gravity="center_vertical"/>
-
 
         </TableRow>
 

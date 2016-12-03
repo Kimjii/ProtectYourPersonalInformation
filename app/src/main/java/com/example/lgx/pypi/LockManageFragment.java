@@ -4,7 +4,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,18 +25,15 @@ import java.io.InputStreamReader;
 public class LockManageFragment extends Fragment
 {
     //test
-    CommunicationManager communicationManager = CommunicationManager.getInstance();
-
-    Button sendButton;
-    //test
+    CommunicationManager communicationManager = new CommunicationManager();
 
     static final String PASSWORD_FILE = "password.txt";
     TextView disPassword;
 
-    ToggleButton lockActivationToggleButton;
+    static ToggleButton lockActivationToggleButton;
     SharedPreferences sharedPreferences;
 
-    String password;
+    static String password;
     @Override
     public View onCreateView( LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState )
     {
@@ -42,15 +42,6 @@ public class LockManageFragment extends Fragment
         // communication related
         communicationManager.bindService( getActivity() );
         communicationManager.connect();
-
-        sendButton = (Button) view.findViewById(R.id.sendButton);
-        sendButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(getActivity().getApplicationContext(), "send!", Toast.LENGTH_LONG).show();
-                communicationManager.send("LockManageFragment", getActivity().getApplicationContext() );
-            }
-        });
         // communication related
 
         final Button changePasswdBtn = (Button) view.findViewById(R.id.changePasswdButton) ;
@@ -63,8 +54,6 @@ public class LockManageFragment extends Fragment
                 startActivity( lockintent );
             }
         });
-
-        disPassword = (TextView) view.findViewById( R.id.disPassword );
 
         loadPassword();
 
@@ -143,8 +132,41 @@ public class LockManageFragment extends Fragment
 
     @Override
     public void onDestroy() {
-        communicationManager.unbound( getActivity() );
-        communicationManager.disconnect( getContext() );
+        communicationManager.destroy();
         super.onDestroy();
     }
+
+    // 타이젠 통신 시 초기 데이터 설정 위해
+    public static boolean getLockActivationToggleState(){
+        return lockActivationToggleButton.isChecked();
+    }
+
+
+    final static Handler handler = new Handler()
+    {
+        public void handleMessage(Message msg)
+        {
+            lockActivationToggleButton.setChecked( !lockActivationToggleButton.isChecked() );
+        }
+    };
+    public static void setLockActivationToggleState(boolean state){
+        Log.i("LockManageActivity", "isChecked() = " + lockActivationToggleButton.isChecked() + ", state = " + state);
+
+        if ( lockActivationToggleButton.isChecked() != state ){
+            new Thread()
+            {
+                public void run()
+                {
+                    Message msg = handler.obtainMessage();
+
+                    handler.sendMessage(msg);
+                }
+            }.start();
+        }
+    }
+
+    public static String getPassword(){ return password; }
+
+    public static void setPassword(String passwd){ password = passwd;  }
+
 }

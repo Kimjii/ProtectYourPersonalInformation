@@ -11,7 +11,7 @@ import android.widget.Toast;
  */
 public class SettingsActivity extends AppCompatActivity {
 
-    CommunicationManager communicationManager = CommunicationManager.getInstance();
+    CommunicationManager communicationManager = new CommunicationManager();
     Button connectButton;
     Button testButton;
 
@@ -21,7 +21,6 @@ public class SettingsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_settings);
 
         communicationManager.bindService( this );
-        communicationManager.connect();
 
         connectButton = (Button)findViewById(R.id.connectButton);
         connectButton.setOnClickListener(new View.OnClickListener() {
@@ -39,4 +38,5 @@ public class SettingsActivity extends AppCompatActivity {
             }
         });
     }
+
 }

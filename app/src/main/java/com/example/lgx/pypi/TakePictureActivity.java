@@ -37,7 +37,7 @@ public class TakePictureActivity extends AppCompatActivity {
     //public static final int SEND_INFORMATION = 0;
     //public static final int SEND_STOP = 1;
 
-    CommunicationManager communicationManager = CommunicationManager.getInstance();
+    CommunicationManager communicationManager = new CommunicationManager();
 
     private Camera camera;
     Button button;
@@ -54,6 +54,7 @@ public class TakePictureActivity extends AppCompatActivity {
         // communication related
         communicationManager.bindService( this );
         communicationManager.connect();
+        // communication related
 
         // 전체 화면 지정( 화면 상부의 아이콘이나 시계 X )
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
@@ -82,6 +83,9 @@ public class TakePictureActivity extends AppCompatActivity {
                     //SD카드에 저장 처리 호출
                     try {
                         saveGallery(data);// SD카드에 저장
+                        Log.i("Picture source", "length:" + data.length + ", data:"+data[0]+data[1] );
+                        // data가 제대로 전송되지 않음!!!
+                        sendToGearS2(data);// 촬영된 사진 gearS2로 전송
                         finish();
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -117,9 +121,6 @@ public class TakePictureActivity extends AppCompatActivity {
         public void surfaceCreated(SurfaceHolder holder) {
             //카메라 초기화
             try {
-                int camNo = Camera.getNumberOfCameras();
-                //Log.i("Number of cameras," + camNo);
-
                 //카메라 오픈
                 camera = Camera.open(Camera.CameraInfo.CAMERA_FACING_FRONT);
 
@@ -183,9 +184,6 @@ public class TakePictureActivity extends AppCompatActivity {
             out.write(data);
             out.close();
 
-            // 촬영된 사진 gearS2로 전송
-            sendToGearS2(data);
-
             // 갤러리에 저장된 이미지를 띄우기 위한 부분 <<<<<<<<<<<<<<<<<<<<<<<<<<안됨>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
             MediaScanner scanner = MediaScanner.newInstance(TakePictureActivity.this);
             scanner.mediaScanning( Environment.getExternalStorageState() +"/" + saveFolderName );
@@ -196,7 +194,8 @@ public class TakePictureActivity extends AppCompatActivity {
     }
 
     public void sendToGearS2(byte[] imgData){
-        communicationManager.send( "1-3-" + imgData.toString() ,this.getApplicationContext() );
+        Log.i("Picture send", imgData.toString() );
+        communicationManager.send( "1-3-" + imgData ,this.getApplicationContext() );
     }
 
 }
