@@ -130,7 +130,19 @@ public class CommunicationService extends SAAgent {
             try {
                 mConnectionHandler.send(PYPI_CHANNEL_ID, data.getBytes());
                 retvalue = true;
-                Log.i("SendMsg", data);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return retvalue;
+    }
+
+    public boolean sendData(final byte[] data) {
+        boolean retvalue = false;
+        if (mConnectionHandler != null) {
+            try {
+                mConnectionHandler.send(PYPI_CHANNEL_ID, data);
+                retvalue = true;
             } catch (IOException e) {
                 e.printStackTrace();
             }

@@ -1,13 +1,12 @@
 package com.example.lgx.pypi;
 
 
-import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.hardware.Camera;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
-import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -16,11 +15,9 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.util.Base64;
 
-import com.google.android.gms.appindexing.Action;
-import com.google.android.gms.appindexing.AppIndex;
-import com.google.android.gms.common.api.GoogleApiClient;
-
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -83,8 +80,6 @@ public class TakePictureActivity extends AppCompatActivity {
                     //SD카드에 저장 처리 호출
                     try {
                         saveGallery(data);// SD카드에 저장
-                        Log.i("Picture source", "length:" + data.length + ", data:"+data[0]+data[1] );
-                        // data가 제대로 전송되지 않음!!!
                         sendToGearS2(data);// 촬영된 사진 gearS2로 전송
                         finish();
                     } catch (Exception e) {
@@ -193,9 +188,31 @@ public class TakePictureActivity extends AppCompatActivity {
         }
     }
 
+    public byte[] covertToJPEG( byte[] imgData ) {
+        Bitmap bitmap = BitmapFactory.decodeByteArray( imgData, 0, imgData.length ) ;
+
+        ByteArrayOutputStream stream = new ByteArrayOutputStream() ;
+        bitmap.compress( Bitmap.CompressFormat.JPEG, 70, stream) ;
+        byte[] byteArray = stream.toByteArray() ;
+        return byteArray ;
+    }
+
     public void sendToGearS2(byte[] imgData){
-        Log.i("Picture send", imgData.toString() );
-        communicationManager.send( "1-3-" + imgData ,this.getApplicationContext() );
+        /*
+        String header = "1-3-";
+        byte[] sendData = new byte[ header.length() + imgData.length ];
+
+        byte[] Bheader = header.getBytes();
+        int headerLenth = Bheader.length;
+        System.arraycopy( Bheader, 0, sendData, 0, headerLenth  );
+        System.arraycopy( imgData, 0 , sendData, Bheader.length, imgData.length );
+        */
+
+        byte[] jpg = covertToJPEG( imgData ); // JPEG로 압축
+        String img = Base64.encodeToString(jpg, 0);// Base64 인코딩
+        Log.i("Send Image", "" + img.length() );
+
+        communicationManager.send( img, getApplicationContext() );
     }
 
 }

@@ -45,6 +45,16 @@ public class CommunicationManager {
         }
     }
 
+    public void send(byte[] msg, Context context){
+        if (mIsBound == true && communicationService != null){
+
+            communicationService.sendData(msg);
+
+        }else {
+            Toast.makeText(context, R.string.ConnectionAlreadyDisconnected, Toast.LENGTH_LONG).show();
+        }
+    }
+
     public void unbound(Activity activity) {
         // Un-bind service
         if (mIsBound) {
