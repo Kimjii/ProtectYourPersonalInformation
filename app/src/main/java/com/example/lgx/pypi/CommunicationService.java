@@ -37,6 +37,7 @@ public class CommunicationService extends SAAgent {
         SA mAccessory = new SA();
         try {
             mAccessory.initialize(this);
+            sendData( String.valueOf(LockManageFragment.getLockActivationToggleState()) );
         } catch (SsdkUnsupportedException e) {
             // try to handle SsdkUnsupportedException
             if (processUnsupportedException(e) == true) {
@@ -146,8 +147,6 @@ public class CommunicationService extends SAAgent {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
-            Toast.makeText(getApplicationContext(), "Send: " + data, Toast.LENGTH_LONG).show();
         }
         return retvalue;
     }
@@ -196,14 +195,9 @@ public class CommunicationService extends SAAgent {
         @Override
         public void onReceive(int channelId, byte[] data) {
             final String message = new String(data);
-            Log.i("CommunicationManager","Received Data is " + message );
+            Log.i("CommunicationService","Received Data is " + message );
 
             CommunicationManager.branchFromTizenMsg( message );
-
-            // broadcast로 보내서 처리
-            Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
-            //LockManageFragment.displayMsg("Received : " + message );
-            //addMessage("Received: ", message);
         }
 
         @Override

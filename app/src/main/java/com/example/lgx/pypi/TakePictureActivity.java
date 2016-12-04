@@ -190,27 +190,19 @@ public class TakePictureActivity extends AppCompatActivity {
 
     public byte[] covertToJPEG( byte[] imgData ) {
         Bitmap bitmap = BitmapFactory.decodeByteArray( imgData, 0, imgData.length ) ;
-
+        bitmap = Bitmap.createScaledBitmap( bitmap, 300 , 300, true );
         ByteArrayOutputStream stream = new ByteArrayOutputStream() ;
-        bitmap.compress( Bitmap.CompressFormat.JPEG, 70, stream) ;
+        bitmap.compress( Bitmap.CompressFormat.JPEG, 100, stream) ;
         byte[] byteArray = stream.toByteArray() ;
         return byteArray ;
     }
 
     public void sendToGearS2(byte[] imgData){
-        /*
         String header = "1-3-";
-        byte[] sendData = new byte[ header.length() + imgData.length ];
-
-        byte[] Bheader = header.getBytes();
-        int headerLenth = Bheader.length;
-        System.arraycopy( Bheader, 0, sendData, 0, headerLenth  );
-        System.arraycopy( imgData, 0 , sendData, Bheader.length, imgData.length );
-        */
 
         byte[] jpg = covertToJPEG( imgData ); // JPEG로 압축
         String img = Base64.encodeToString(jpg, 0);// Base64 인코딩
-        Log.i("Send Image", "" + img.length() );
+        img = header + img;
 
         communicationManager.send( img, getApplicationContext() );
     }

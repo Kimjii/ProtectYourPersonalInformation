@@ -80,24 +80,6 @@ public class CommunicationManager {
         }
     };
 
-    /* send */
-    public void sendInitialize(){
-        // gear와 통신해야하는 모든 정보 전송
-
-        if (mIsBound == true && communicationService != null){
-            // 1. 잠금관리 - 잠금 활성화 여부, 비밀번호
-            communicationService.sendData( String.valueOf(LockManageFragment.getLockActivationToggleState()) );
-            communicationService.sendData( String.valueOf(LockManageFragment.getPassword()) );
-
-            // 2.
-
-            // 3.
-
-            // 4. 분실관리 - 초기화 활성화 여부
-
-        }
-    }
-
     /* receive */
     public static void branchFromTizenMsg( String message ){
         String messages[] = null;
@@ -108,25 +90,47 @@ public class CommunicationManager {
         if( messages == null )  return;
 
         switch( messages[0] ){
+            // lock manage
             case "1": {
                 if (messages[1].equals("1")) {
-                    if (messages[2].equals("1"))
+                    if (messages[2].equals("1")) // 1-1-1
                         LockManageFragment.setLockActivationToggleState(true);
-                    else
+
+                    else //1-1-2
                         LockManageFragment.setLockActivationToggleState(false);
-                } else if (messages[1].equals("2"))
+
+                }
+                else if (messages[1].equals("2")) // 1-2-1
                     LockManageFragment.setPassword(messages[2]);
+
+                // android에서는 1-3-xxx data를 수신하지 않음
 
                 break;
             }
 
-            case "2":
-                break;
+            // app manage
+            case "2": {
+                if (messages[1].equals("1")) {
+                    if (messages[2].equals("1")) // 2-1-1
+                        Log.i("Receive", "Public Mode로 설정!");
 
+                    else // 2-1-2
+                        Log.i("Receive", "Private Mode로 설정!");
+                }
+
+                break;
+            }
+
+            // account manage ; gear to android 통신은 하지 않음
             case "3":
                 break;
 
+            // missing manage
             case "4":
+                if (messages[1].equals("2")) {
+                    if (messages[2].equals("2")) // 2-1-1
+                        Log.i("Receive", "초기화!");
+                }
                 break;
 
             default:

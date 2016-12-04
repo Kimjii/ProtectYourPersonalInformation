@@ -21,8 +21,10 @@ import android.widget.ToggleButton;
 
 public class AdminReceiver extends  DeviceAdminReceiver{
     public static class MissingManageFragment extends Fragment {
-        private DevicePolicyManager mDPM;       //디바이스 정책 관리자
-        private ComponentName mDeviceAdmin;    //컴포넌트 네임
+        CommunicationManager communicationManager = new CommunicationManager();
+
+        private static DevicePolicyManager mDPM;       //디바이스 정책 관리자
+        private static ComponentName mDeviceAdmin;    //컴포넌트 네임
 
         private ToggleButton initializeActivationToggleButton;
         private Button initializeButton;
@@ -32,6 +34,11 @@ public class AdminReceiver extends  DeviceAdminReceiver{
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
             View view = inflater.inflate(R.layout.fragment_missingmanage, null);
+
+            // communication related
+            communicationManager.bindService( getActivity() );
+            communicationManager.connect();
+            // communication related
 
             //디바이스 정책 관리자 구현
             mDPM = (DevicePolicyManager)getActivity().getSystemService(Context.DEVICE_POLICY_SERVICE);
@@ -61,9 +68,11 @@ public class AdminReceiver extends  DeviceAdminReceiver{
                     Intent intent = new Intent(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN);
                     intent.putExtra( DevicePolicyManager.EXTRA_DEVICE_ADMIN, mDeviceAdmin );
                     startActivity(intent);
+
                 }
                 else
                     mDPM.removeActiveAdmin(mDeviceAdmin);
+
 
                 updateButtonStates();
             }
@@ -91,20 +100,36 @@ public class AdminReceiver extends  DeviceAdminReceiver{
         void updateButtonStates(){
             boolean active = mDPM.isAdminActive(mDeviceAdmin);
 
-            if(active)
+            if(active){
                 initializeButton.setEnabled(true);
-            else
+            }
+            else{
                 initializeButton.setEnabled(false);
+            }
+            sendState();
+        }
+
+        void sendState(){
+            if ( initializeActivationToggleButton.isChecked() )
+                communicationManager.send("4-1-1", getActivity().getApplicationContext() );
+            else
+                communicationManager.send("4-1-2", getActivity().getApplicationContext() );
         }
 
         @Override
         public void onResume() {
             super.onResume();
+
+            // communication related
+            communicationManager.bindService( getActivity() );
+            communicationManager.connect();
+            // communication related
+
             updateButtonStates();
             load();
         }
 
-        public void initializeDevice(){
+        public static void initializeDevice(){
             mDPM.wipeData(0);
         }
 
@@ -125,6 +150,7 @@ public class AdminReceiver extends  DeviceAdminReceiver{
             boolean isChecked = sharedPreferences.getBoolean( "initializeActivationToggleState", false );
 
             initializeActivationToggleButton. setChecked(isChecked);
+            sendState();
         }
     }
 }

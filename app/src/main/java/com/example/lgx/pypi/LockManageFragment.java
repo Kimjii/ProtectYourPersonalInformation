@@ -39,11 +39,6 @@ public class LockManageFragment extends Fragment
     {
         View view = inflater.inflate( R.layout.fragment_lockmanage, null );
 
-        // communication related
-        communicationManager.bindService( getActivity() );
-        communicationManager.connect();
-        // communication related
-
         final Button changePasswdBtn = (Button) view.findViewById(R.id.changePasswdButton) ;
         changePasswdBtn.setOnClickListener(new Button.OnClickListener() {
             @Override
@@ -62,15 +57,14 @@ public class LockManageFragment extends Fragment
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if( isChecked ){
-                    communicationManager.send("1-1-1", getActivity().getApplicationContext() );
                     Intent intent = new Intent( getActivity(), ScreenService.class);
                     getActivity().startService(intent);
                 }
                 else {
-                    communicationManager.send("1-1-2", getActivity().getApplicationContext() );
                     Intent intent = new Intent( getActivity(), ScreenService.class);
                     getActivity().stopService(intent);
                 }
+                sendState();
             }
         });
 
@@ -78,6 +72,13 @@ public class LockManageFragment extends Fragment
 
         //생성된 View 객체를 리턴
         return view;
+    }
+
+    void sendState(){
+        if ( getLockActivationToggleState() )
+            communicationManager.send("1-1-1", getActivity().getApplicationContext() );
+        else
+            communicationManager.send("1-1-2", getActivity().getApplicationContext() );
     }
 
     void loadPassword()
@@ -112,6 +113,13 @@ public class LockManageFragment extends Fragment
     @Override
     public void onResume() {
         super.onResume();
+
+        // communication related
+        communicationManager.bindService( getActivity() );
+        communicationManager.connect();
+        sendState();
+        // communication related
+
         load();
     }
 
@@ -132,7 +140,7 @@ public class LockManageFragment extends Fragment
 
     @Override
     public void onDestroy() {
-        communicationManager.destroy();
+        //communicationManager.destroy();
         super.onDestroy();
     }
 
@@ -140,7 +148,6 @@ public class LockManageFragment extends Fragment
     public static boolean getLockActivationToggleState(){
         return lockActivationToggleButton.isChecked();
     }
-
 
     final static Handler handler = new Handler()
     {
