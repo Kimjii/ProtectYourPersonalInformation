@@ -20,7 +20,7 @@ import java.io.IOException;
  */
 
 public class CommunicationService extends SAAgent {
-    private static final String TAG = "PYPI";
+    private static final String TAG = "PYPICommunicationService";
     private static final int PYPI_CHANNEL_ID = 104;
     private static final Class<ServiceConnection> SASOCKET_CLASS = ServiceConnection.class;
     private final IBinder mBinder = new LocalBinder();

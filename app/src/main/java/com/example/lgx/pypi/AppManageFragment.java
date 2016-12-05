@@ -1,6 +1,8 @@
 package com.example.lgx.pypi;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -18,6 +20,8 @@ public class AppManageFragment extends Fragment
     CommunicationManager communicationManager = new CommunicationManager();
     static ToggleButton toggleButton;
 
+    SharedPreferences sharedPreferences;
+
     @Override
     public View onCreateView( LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState )
     {
@@ -30,28 +34,30 @@ public class AppManageFragment extends Fragment
             @Override
             public void onCheckedChanged ( CompoundButton buttonView, boolean isChecked )
             {
-                Intent launcherIntent = getActivity().getPackageManager().getLaunchIntentForPackage("com.example.lgx.pypilauncher");
+                //Intent launcherIntent = getActivity().getPackageManager().getLaunchIntentForPackage("com.example.lgx.pypilauncher");
 
-                if ( launcherIntent == null )
-                    Log.d("널이야!!!", "NULLL!!!!!!1");
+                //if ( launcherIntent == null )
+                //  Log.d("널이야!!!", "NULLL!!!!!!1");
 
                 if ( isChecked ) // private
                 {
                     textView.setText( "Private 모드 입니다." );
-                    launcherIntent.putExtra("mode", "private");
-                    sendState();
+                    //launcherIntent.putExtra("mode", "private");
                 }
 
                 else // public
                 {
                     textView.setText( "Public 모드 입니다." );
-                    launcherIntent.putExtra("mode", "public");
-                    sendState();
+                    //launcherIntent.putExtra("mode", "public");
                 }
 
-                startActivity(launcherIntent);
+                sendState();
+                //startActivity(launcherIntent);
             }
         });
+
+        sharedPreferences = this.getActivity().getSharedPreferences("pref", Context.MODE_PRIVATE);
+
         return view;
     }
 
@@ -89,5 +95,37 @@ public class AppManageFragment extends Fragment
                 }
             }.start();
         }
+    }
+
+    /* 앱 종료 후 재실행 시 컴포넌트 상태 저장을 위한 부분*/
+    public void onPause() {
+        super.onPause();
+        save();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        // communication related
+        communicationManager.bindService( getActivity() );
+        communicationManager.connect();
+        sendState();
+        // communication related
+
+        load();
+    }
+
+    public void save() {
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        editor.putBoolean("modeActivationToggleState", toggleButton.isChecked());
+        editor.commit();
+    }
+
+    public void load() {
+        boolean isChecked = sharedPreferences.getBoolean( "modeActivationToggleState", false );
+
+        toggleButton. setChecked(isChecked);
     }
 }

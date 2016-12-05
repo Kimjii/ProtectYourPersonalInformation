@@ -20,7 +20,6 @@ import android.widget.Toast;
 public class AccountManageFragment extends Fragment
 {
     static DBHelper dbHelper;
-    Cursor cursor;
     SQLiteDatabase db;
     AccountListViewAdapter adapter;
     ListView accountListView;
@@ -81,10 +80,14 @@ public class AccountManageFragment extends Fragment
 
     public void showAccountListView ()
     {
-        cursor = db.rawQuery( "SELECT * FROM ACCOUNTBOOK", null );
+        Cursor cursor = db.rawQuery( "SELECT * FROM ACCOUNTBOOK", null );
         adapter = new AccountListViewAdapter( getActivity(), cursor );
 
         accountListView.setAdapter( adapter );
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+    }
 }

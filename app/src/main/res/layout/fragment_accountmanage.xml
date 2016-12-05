@@ -7,11 +7,12 @@
 
     <ListView
         android:layout_width = "match_parent"
-        android:layout_height = "100dp"
+        android:layout_height = "match_parent"
         android:id = "@+id/accountManageListView"
         android:layout_gravity = "center_horizontal"
         android:layout_weight = "87.50"
-        />
+        android:layout_above="@+id/fab"
+        android:layout_alignParentTop="true" />
 
     <android.support.design.widget.FloatingActionButton
         android:id = "@+id/fab"
