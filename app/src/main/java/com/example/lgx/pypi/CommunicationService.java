@@ -20,7 +20,7 @@ import java.io.IOException;
  */
 
 public class CommunicationService extends SAAgent {
-    private static final String TAG = "PYPICommunicationService";
+    private static final String TAG = "PYPI";
     private static final int PYPI_CHANNEL_ID = 104;
     private static final Class<ServiceConnection> SASOCKET_CLASS = ServiceConnection.class;
     private final IBinder mBinder = new LocalBinder();
@@ -65,13 +65,17 @@ public class CommunicationService extends SAAgent {
             for (SAPeerAgent peerAgent : peerAgents)
                 requestServiceConnection(peerAgent);
         } else if (result == SAAgent.FINDPEER_DEVICE_NOT_CONNECTED) {
-            Toast.makeText(getApplicationContext(), "FINDPEER_DEVICE_NOT_CONNECTED", Toast.LENGTH_LONG).show();
+            Log.i( "FindPeerAgentsResponse" , "FINDPEER_DEVICE_NOT_CONNECTED");
+            //Toast.makeText(getApplicationContext(), "FINDPEER_DEVICE_NOT_CONNECTED", Toast.LENGTH_LONG).show();
             //updateTextView("Disconnected");
         } else if (result == SAAgent.FINDPEER_SERVICE_NOT_FOUND) {
-            Toast.makeText(getApplicationContext(), "FINDPEER_SERVICE_NOT_FOUND", Toast.LENGTH_LONG).show();
+            Log.i( "FindPeerAgentsResponse" , "FINDPEER_SERVICE_NOT_FOUND");
+
+            //Toast.makeText(getApplicationContext(), "FINDPEER_SERVICE_NOT_FOUND", Toast.LENGTH_LONG).show();
             //updateTextView("Disconnected");
         } else {
-            Toast.makeText(getApplicationContext(), R.string.NoPeersFound, Toast.LENGTH_LONG).show();
+            Log.i("FindPeerAgentsResponse", "No_Peers_Found");
+            //Toast.makeText(getApplicationContext(), R.string.NoPeersFound, Toast.LENGTH_LONG).show();
         }
     }
 
@@ -88,13 +92,15 @@ public class CommunicationService extends SAAgent {
             this.mConnectionHandler = (ServiceConnection) socket;
             Log.i("CONNECT", "connected");
         } else if (result == SAAgent.CONNECTION_ALREADY_EXIST) {
-            Log.i("CONNECT", "connected");
-            Toast.makeText(getBaseContext(), "CONNECTION_ALREADY_EXIST", Toast.LENGTH_LONG).show();
+            Log.i("CONNECT", "connected already");
+            //Toast.makeText(getBaseContext(), "CONNECTION_ALREADY_EXIST", Toast.LENGTH_LONG).show();
         } else if (result == SAAgent.CONNECTION_DUPLICATE_REQUEST) {
-            Toast.makeText(getBaseContext(), "CONNECTION_DUPLICATE_REQUEST", Toast.LENGTH_LONG).show();
+            Log.i("CONNECT", "CONNECTION_DUPLICATE_REQUEST");
+
+            //Toast.makeText(getBaseContext(), "CONNECTION_DUPLICATE_REQUEST", Toast.LENGTH_LONG).show();
         } else {
             Log.i("FAIL", "fail");
-            Toast.makeText(getBaseContext(), R.string.ConnectionFailure, Toast.LENGTH_LONG).show();
+            //Toast.makeText(getBaseContext(), R.string.ConnectionFailure, Toast.LENGTH_LONG).show();
         }
     }
 
@@ -112,9 +118,11 @@ public class CommunicationService extends SAAgent {
             public void run() {
                 if (peers != null) {
                     if (status == SAAgent.PEER_AGENT_AVAILABLE) {
+                        Log.i("PEER_AGENT", "AVAILABLE");
                         Toast.makeText(getApplicationContext(), "PEER_AGENT_AVAILABLE", Toast.LENGTH_LONG).show();
                     } else {
-                        Toast.makeText(getApplicationContext(), "PEER_AGENT_UNAVAILABLE", Toast.LENGTH_LONG).show();
+                        Log.i("PEER_AGENT", "UNAVAILABLE");
+                        //Toast.makeText(getApplicationContext(), "PEER_AGENT_UNAVAILABLE", Toast.LENGTH_LONG).show();
                     }
                 }
             }
