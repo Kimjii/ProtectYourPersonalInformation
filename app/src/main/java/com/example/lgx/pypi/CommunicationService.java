@@ -5,7 +5,6 @@ import android.os.Binder;
 import android.os.Handler;
 import android.os.IBinder;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.samsung.android.sdk.SsdkUnsupportedException;
 import com.samsung.android.sdk.accessory.SA;
@@ -119,7 +118,7 @@ public class CommunicationService extends SAAgent {
                 if (peers != null) {
                     if (status == SAAgent.PEER_AGENT_AVAILABLE) {
                         Log.i("PEER_AGENT", "AVAILABLE");
-                        Toast.makeText(getApplicationContext(), "PEER_AGENT_AVAILABLE", Toast.LENGTH_LONG).show();
+                        //Toast.makeText(getApplicationContext(), "PEER_AGENT_AVAILABLE", Toast.LENGTH_LONG).show();
                     } else {
                         Log.i("PEER_AGENT", "UNAVAILABLE");
                         //Toast.makeText(getApplicationContext(), "PEER_AGENT_UNAVAILABLE", Toast.LENGTH_LONG).show();

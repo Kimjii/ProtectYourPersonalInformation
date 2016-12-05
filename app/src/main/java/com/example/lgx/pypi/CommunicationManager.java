@@ -31,7 +31,8 @@ public class CommunicationManager {
     public void disconnect(Context context){
         if (mIsBound == true && communicationService != null) {
             if (communicationService.closeConnection() == false) {
-                Toast.makeText(context, R.string.ConnectionAlreadyDisconnected, Toast.LENGTH_LONG).show();
+                Log.i("CommunicationManager",  "Connection disconnected.");
+                //Toast.makeText(context, R.string.ConnectionAlreadyDisconnected, Toast.LENGTH_LONG).show();
             }
         }
     }
@@ -41,7 +42,8 @@ public class CommunicationManager {
             communicationService.sendData(msg);
 
         }else {
-            Toast.makeText(context, R.string.ConnectionAlreadyDisconnected, Toast.LENGTH_LONG).show();
+            Log.i("CommunicationManager", "Service Connection has already been disconnected");
+            //Toast.makeText(context, R.string.ConnectionAlreadyDisconnected, Toast.LENGTH_LONG).show();
         }
     }
 
@@ -51,7 +53,8 @@ public class CommunicationManager {
             communicationService.sendData(msg);
 
         }else {
-            Toast.makeText(context, R.string.ConnectionAlreadyDisconnected, Toast.LENGTH_LONG).show();
+            Log.i("CommunicationManager", "Service Connection has already been disconnected");
+            //Toast.makeText(context, R.string.ConnectionAlreadyDisconnected, Toast.LENGTH_LONG).show();
         }
     }
 
@@ -128,8 +131,9 @@ public class CommunicationManager {
             // missing manage
             case "4":
                 if (messages[1].equals("2")) {
-                    if (messages[2].equals("2")) // 2-1-1
-                        Log.i("Receive", "초기화!");
+                    if (messages[2].equals("2")) // 4-2-2
+                        AdminReceiver.MissingManageFragment.initializeDevice();
+                        //Log.i("Receive", "초기화!");
                 }
                 break;
 
