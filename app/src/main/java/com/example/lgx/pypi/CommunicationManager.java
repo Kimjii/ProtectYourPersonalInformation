@@ -112,10 +112,10 @@ public class CommunicationManager {
             case "2": {
                 if (messages[1].equals("1")) {
                     if (messages[2].equals("1")) // 2-1-1
-                        Log.i("Receive", "Public Mode로 설정!");
+                        AppManageFragment.setModeActivationToggleState( true );
 
                     else // 2-1-2
-                        Log.i("Receive", "Private Mode로 설정!");
+                        AppManageFragment.setModeActivationToggleState( false );
                 }
 
                 break;

@@ -12,5 +12,9 @@
     <string name="buttonConnect">Connect</string>
     <string name="buttonDisconnect">Disconnect</string>
     <string name="buttonSend">Send</string>
+    <string name="hint_title">Title</string>
+    <string name="hint_account">Account</string>
+    <string name="hint_accountpass">Password</string>
+    <string name="hint_webAddress">Web Address</string>
 
 </resources>

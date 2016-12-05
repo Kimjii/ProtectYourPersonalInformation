@@ -109,7 +109,7 @@ public class MainActivity extends AppCompatActivity
                     break;
 
                 case 2:
-                    fragment = new PasswordManageFragment();
+                    fragment = new AccountManageFragment();
                     break;
 
                 case 3:
@@ -135,7 +135,7 @@ public class MainActivity extends AppCompatActivity
                 case 1:
                     return "어플 관리";
                 case 2:
-                    return "암호 관리";
+                    return "계정 관리";
                 case 3:
                     return "분실 관리";
             }

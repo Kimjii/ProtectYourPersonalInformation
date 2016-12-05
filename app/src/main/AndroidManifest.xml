@@ -137,5 +137,9 @@
 
         </receiver>
 
+        <activity android:name=".AccountAddActivity"/>
+
+        <activity android:name=".AccountDetailActivity"/>
+
     </application>
 </manifest>
