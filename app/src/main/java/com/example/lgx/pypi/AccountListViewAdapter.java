@@ -25,8 +25,8 @@ public class AccountListViewAdapter extends CursorAdapter
     @Override
     public void bindView( View view, Context context, Cursor cursor )
     {
-        TextView titleTextView = (TextView)view.findViewById( R.id.titleTextView );
-        TextView accountTextView = (TextView)view.findViewById( R.id.accountTextView );
+        TextView titleTextView = (TextView)view.findViewById( android.R.id.text1 );
+        TextView accountTextView = (TextView)view.findViewById( android.R.id.text2 );
 
         String title = cursor.getString( cursor.getColumnIndex( "TITLE" ) );
         String account = cursor.getString( cursor.getColumnIndex( "ACCOUNT" ) );
@@ -41,7 +41,7 @@ public class AccountListViewAdapter extends CursorAdapter
     public View newView( Context context, Cursor cursor, ViewGroup parent )
     {
         LayoutInflater inflater = LayoutInflater.from( context );
-        View v = inflater.inflate( R.layout.item_accountlist, parent, false );
+        View v = inflater.inflate( android.R.layout.simple_list_item_2, parent, false );
 
         return v;
     }

@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.IBinder;
 import android.util.Log;
-import android.widget.Toast;
 
 /**
  * Created by Jiwon on 2016-11-24.
@@ -86,7 +85,7 @@ public class CommunicationManager {
     /* receive */
     public static void branchFromTizenMsg( String message ){
         String messages[] = null;
-
+        Log.i("CommunityManager", message);
         if ( message.contains("-") )
             messages = message.split("-");
 

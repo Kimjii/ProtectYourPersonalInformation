@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.Fragment;
@@ -15,10 +16,15 @@ import android.widget.CompoundButton;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+
 public class AppManageFragment extends Fragment
 {
     CommunicationManager communicationManager = new CommunicationManager();
     static ToggleButton toggleButton;
+    Intent launcherIntent;
 
     SharedPreferences sharedPreferences;
 
@@ -34,25 +40,19 @@ public class AppManageFragment extends Fragment
             @Override
             public void onCheckedChanged ( CompoundButton buttonView, boolean isChecked )
             {
-                //Intent launcherIntent = getActivity().getPackageManager().getLaunchIntentForPackage("com.example.lgx.pypilauncher");
-
-                //if ( launcherIntent == null )
-                //  Log.d("널이야!!!", "NULLL!!!!!!1");
-
                 if ( isChecked ) // private
                 {
                     textView.setText( "Private 모드 입니다." );
-                    //launcherIntent.putExtra("mode", "private");
+                    writeFile("private");
                 }
 
                 else // public
                 {
                     textView.setText( "Public 모드 입니다." );
-                    //launcherIntent.putExtra("mode", "public");
+                    writeFile("public");
                 }
 
                 sendState();
-                //startActivity(launcherIntent);
             }
         });
 
@@ -128,4 +128,27 @@ public class AppManageFragment extends Fragment
 
         toggleButton. setChecked(isChecked);
     }
+
+
+    public void writeFile( String fileStr )
+    {
+        File file;
+        String path = Environment.getExternalStorageDirectory()+"/pypimode";
+        file = new File(path);
+
+        if( !file.exists() ) // 원하는 경로에 폴더가 있는지 확인
+            file.mkdirs();
+
+        file = new File(path+"/mode.txt");
+
+        try
+        {
+            FileOutputStream fos = new FileOutputStream(file);
+            fos.write(fileStr.getBytes());
+            fos.close();
+        }
+
+        catch(IOException e) {}
+    }
+
 }

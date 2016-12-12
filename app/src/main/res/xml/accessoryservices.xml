@@ -77,6 +77,8 @@
 
                 <transport type="TRANSPORT_BT" />
 
+                <transport type="Transport_BLE"/>
+
                 <transport type="TRANSPORT_WIFI" />
 
             </supportedTransports>
